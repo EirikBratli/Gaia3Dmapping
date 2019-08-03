@@ -13,6 +13,11 @@ import Tools
 import numba as nb
 cmaps = cm.get_cmap
 
+#EIRIK: General comment: Make your functions as simple as possible. It's better
+# to divide your functions into several functions and have a master function
+# call them all rather than doing everything inside one single function. It's
+# easier to track and debug. 
+
 """
 Make distribution of stars within different distances. So can make a 3D map of
 the distributions.
@@ -24,6 +29,7 @@ Functions to calculate properties
 ############
 """
 # Params:
+# EIRIK: Again, put constants in a separate module and make them capital letters 
 ZP_blue        = 25.3513881707
 ZP_red         = 24.7619199882
 ZP_green       = 25.6883657251
@@ -43,6 +49,11 @@ def testNside(l,u):
     Input: - l, int-scalar,
            - u, int-scalar,    Both must follow 2**p.
     """
+    # EIRIK: Make documentation so that things are understandable for someone
+    # who doesn't know. l, u are 'poor' variable names as they don't convey any
+    # information (I can guess it's lower and upper, but explicit is better
+    # than implicit). And what qualifies as 'best' here? Explain in the
+    # documentation.
     if l==False and u==False:
         print('No input! Need lower and upper power of 2, in Nside=2**p')
         sys.exit()

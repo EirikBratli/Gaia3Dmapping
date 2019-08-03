@@ -7,6 +7,9 @@ import glob, sys, os
 import h5py
 import time
 
+# EIRIK: It seems like some of these data are for file input/output while
+# others are for handling the actual astrophysical data. I would make a clean
+# separation between those two concepts and make two modules for it.
 
 """
 - Read in .csv data files fo Gaia DR2 and convert relevant columns into .fits files.
@@ -25,6 +28,10 @@ import time
   distance and coordinate transformation function in healpy.)
 """ 
 
+# EIRIK: In general, using uppercase letters for constants is 'best practice'.
+# Further, I would recommend putting all constants in a separate module and
+# then import that module. Global variables are in general frowned upon in
+# Python.
 # Convertion factors:
 deg2rad = np.pi/180.0
 unseen  = -1.6375e+30
@@ -45,6 +52,8 @@ def get_csv_data(read_path, save_path):
     
     #print(len(os.listdir(path)))
     
+    # EIRIK: Every string has an .endswith() function that you should use
+    # instead of this method.
     if a[-2] == 'csv':
          print('Read .csv files')
          datafiles = glob.glob(path)
@@ -83,6 +92,9 @@ def get_csv_data(read_path, save_path):
         # read all files
         start = time.time()
         for ind, file in enumerate(datafiles):
+            #EIRIK: This is an ok thing to do I suppose, though slightly more
+            # elegant if we used something in the np library. What about
+            # genfromtxt?
             df = pd.read_csv(file, usecols=cols)
             data_array = np.asarray(df)
                        
@@ -110,6 +122,10 @@ def get_csv_data(read_path, save_path):
         
         # write parameter files
         #""" 
+        # EIRIK: This should be done in a for loop, using a dictionary or
+        # similar for the things that vary between each loop. No real need to
+        # have a new name for the file object variable either (just hdf is
+        # fine, not hdf0, hdf1, hdf2...)
         hdf0 = h5py.File('{}_source_id.h5'.format(save_path), 'w')
         hdf0.create_dataset('source_id', data=source_id.astype(int))  
         hdf0.close()
